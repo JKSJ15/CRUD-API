@@ -10,34 +10,34 @@ import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Repository.UsuarioRepository;
 
 @Service
-public class UsuarioService implements UsuarioRepository{
-	private ArrayList<Usuario> usuarios = new ArrayList<>(List.of(new Usuario("Jakson", 1L), new Usuario("Abreu e lima", 2L), new Usuario("Kaká", 3L),
-			new Usuario("Maria", 4L), new Usuario("Roque", 5L), new Usuario("Josefa", 6L), new Usuario("Fulano", 7L), new Usuario("Fulana", 8L), new Usuario("Yago", 9L), new Usuario("Tatiane", 10L)));
-
-	//GETTERS MAPPING
-	@Override
-	public ArrayList<Usuario> listar() {
-		return usuarios;
+public class UsuarioService{
+	private final UsuarioRepository ur;
+	public UsuarioService(UsuarioRepository ur) {
+		super();
+		this.ur = ur;
 	}
-	@Override
+	//GETTERS MAPPING
+	public List<Usuario> listar() {
+		return ur.findAll();
+	}
 	public Usuario encontrarPeloId(long id) {
-		return usuarios.stream().filter(n -> n.getId() == id).findFirst().orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id do usuário não encontrado!"));
+		return ur.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id do usuário não encontrado!"));
 	}
 	//POST MAPPING
-	@Override
 	public ResponseEntity<Usuario> salvar(Usuario usu) {
-		usuarios.add(usu);
+		ur.save(usu);
 		return new ResponseEntity<Usuario>(( HttpStatus.CREATED));
 	}
 	//PUT MAPPING
-	@Override
 	public void atualizar(long id, Usuario usuario) {
-		deletar(id);
+		if (usuario.getId()!=id) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ids de busca e de inserção são distintos!");
+		}
+		ur.delete(encontrarPeloId(id));
 		salvar(usuario);
 	}
 	//DELETE MAPPING
-	@Override
 	public void deletar(long id) {
-		usuarios.remove(encontrarPeloId(id));
+		ur.delete(encontrarPeloId(id));
 	}
 }

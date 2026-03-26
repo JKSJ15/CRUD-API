@@ -1,6 +1,6 @@
 package crudusuarios.spring.Controller;
 
-import java.util.ArrayList;
+import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,7 @@ import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Service.UsuarioService;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 	private final UsuarioService us;
 	public UsuarioController(UsuarioService us) {
@@ -22,7 +22,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping()
-	public ArrayList listar(){
+	public List<Usuario> listar(){
 		return us.listar();
 	}
 	@GetMapping(path = "/{id}")

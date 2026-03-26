@@ -1,0 +1,11 @@
+server:error:
+    include-stacktrace: none
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/project
+    username: root
+    password: adimin
+jpa:
+    hibernate:
+      ddl-auto: update

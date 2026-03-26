@@ -4,9 +4,19 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import crudusuarios.spring.Repository.UsuarioRepository;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "user")
 public class Usuario{
+	@Column(name = "name")
 	private String nome;
+	@Id
 	private long id;
 	
 	public Usuario(String nome, long id) {
@@ -14,6 +24,7 @@ public class Usuario{
 		this.nome = nome;
 		this.id = id;
 	}
+	public Usuario() {}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, nome);
