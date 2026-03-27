@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Service.UsuarioService;
+import crudusuarios.spring.dto.UsuarioDto;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 	private final UsuarioService us;
 	public UsuarioController(UsuarioService us) {
@@ -22,19 +23,19 @@ public class UsuarioController {
 	}
 	
 	@GetMapping()
-	public List<Usuario> listar(){
+	public List<UsuarioDto> listar(){
 		return us.listar();
 	}
 	@GetMapping(path = "/{id}")
-	public Usuario encontrarPeloId(@PathVariable long id){
+	public UsuarioDto encontrarPeloId(@PathVariable long id){
 		return us.encontrarPeloId(id);
 	}
 	@PostMapping
-	public void salvar(@RequestBody Usuario usuario) {
+	public void salvar(@RequestBody UsuarioDto usuario) {
 		us.salvar(usuario);
 	}
 	@PutMapping(path = "/{id}")
-	public void atualizar(@PathVariable long id, @RequestBody Usuario usuario) {
+	public void atualizar(@PathVariable long id, @RequestBody UsuarioDto usuario) {
 		us.atualizar(id, usuario);
 	}
 	@DeleteMapping(path = "/{id}")
