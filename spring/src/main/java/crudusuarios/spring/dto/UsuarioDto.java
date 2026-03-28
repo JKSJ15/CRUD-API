@@ -1,8 +1,13 @@
 package crudusuarios.spring.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class UsuarioDto {
+	@NotEmpty(message = "O nome do Usuário não pode ser nulo")
 	private String nome;
+	
 	private Long id;
+	
 	public UsuarioDto() {}
 	public String getNome() {
 		return nome;

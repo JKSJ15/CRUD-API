@@ -27,6 +27,9 @@ public class UsuarioService{
 		Usuario usu = ur.findById(id).orElseThrow(()->new UserNotFoundException("Usuário não encontrado!"));
 		return UsuarioMapping.paraDto(usu);
 	}
+	public List<UsuarioDto> encontrarPeloNome(String nome) {
+		return ur.findByNome(nome).stream().map(u-> UsuarioMapping.paraDto(u)).toList();
+	}
 	//POST MAPPING
 	public ResponseEntity<UsuarioDto> salvar(UsuarioDto dto) {
 		

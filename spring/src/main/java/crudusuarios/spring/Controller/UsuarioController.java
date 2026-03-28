@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Service.UsuarioService;
 import crudusuarios.spring.dto.UsuarioDto;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -30,12 +32,16 @@ public class UsuarioController {
 	public UsuarioDto encontrarPeloId(@PathVariable long id){
 		return us.encontrarPeloId(id);
 	}
+	@GetMapping(path = "/find")
+	public List<UsuarioDto> encontrarPeloNome(@RequestParam String nome){
+		return us.encontrarPeloNome(nome);
+	}
 	@PostMapping
-	public void salvar(@RequestBody UsuarioDto usuario) {
+	public void salvar(@RequestBody @Valid UsuarioDto usuario) {
 		us.salvar(usuario);
 	}
 	@PutMapping(path = "/{id}")
-	public void atualizar(@PathVariable long id, @RequestBody UsuarioDto usuario) {
+	public void atualizar(@PathVariable long id, @RequestBody @Valid UsuarioDto usuario) {
 		us.atualizar(id, usuario);
 	}
 	@DeleteMapping(path = "/{id}")
