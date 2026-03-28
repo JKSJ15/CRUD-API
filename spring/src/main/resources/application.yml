@@ -1,5 +1,5 @@
 server:error:
-    include-stacktrace: none
+    include-stacktrace: never
 
 spring:
   datasource:
