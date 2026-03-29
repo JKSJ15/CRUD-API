@@ -1,11 +1,7 @@
 package crudusuarios.spring.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Repository.UsuarioRepository;
 import crudusuarios.spring.dto.UsuarioDto;
@@ -31,10 +27,12 @@ public class UsuarioService{
 		return ur.findByNome(nome).stream().map(u-> UsuarioMapping.paraDto(u)).toList();
 	}
 	//POST MAPPING
-	public ResponseEntity<UsuarioDto> salvar(UsuarioDto dto) {
-		
-		ur.save(UsuarioMapping.paraUsuario(dto));
-		return new ResponseEntity<UsuarioDto>(( HttpStatus.CREATED));
+	public UsuarioDto salvar(UsuarioDto dto) {
+		if (ur.existsById(dto.getId())) {
+	        throw new IllegalArgumentException("Já existe um usuário cadastrado com esse Id!");
+	    }
+		Usuario usuario = ur.save(UsuarioMapping.paraUsuario(dto));
+	    return UsuarioMapping.paraDto(usuario);
 	}
 	//PUT MAPPING
 	public void atualizar(long id, UsuarioDto dto) {
@@ -42,13 +40,12 @@ public class UsuarioService{
 			throw new IllegalArgumentException("Ids de inserção e de busca não conferem!");
 		}
 		Usuario usu = ur.findById(id).orElseThrow(()->new UserNotFoundException("Usuário não encontrado!"));
-		usu.setId(dto.getId());
 		usu.setNome(dto.getNome());
 		ur.save(usu);
 	}
 	//DELETE MAPPING
 	public void deletar(long id) {
-		UsuarioDto dto = encontrarPeloId(id);
-		ur.delete(UsuarioMapping.paraUsuario(dto));
+		Usuario usu = ur.findById(id).orElseThrow(()->new UserNotFoundException("Usuário não encontrado!"));
+		ur.delete(usu);
 	}
 }

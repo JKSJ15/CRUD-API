@@ -1,6 +1,8 @@
 package crudusuarios.spring.Controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Service.UsuarioService;
 import crudusuarios.spring.dto.UsuarioDto;
 import jakarta.validation.Valid;
@@ -25,27 +26,29 @@ public class UsuarioController {
 	}
 	
 	@GetMapping()
-	public List<UsuarioDto> listar(){
-		return us.listar();
+	public ResponseEntity<List<UsuarioDto>> listar(){
+		return new ResponseEntity<>(us.listar(), HttpStatus.OK);
 	}
 	@GetMapping(path = "/{id}")
-	public UsuarioDto encontrarPeloId(@PathVariable long id){
-		return us.encontrarPeloId(id);
+	public ResponseEntity<UsuarioDto> encontrarPeloId(@PathVariable long id){
+		return new ResponseEntity<>(us.encontrarPeloId(id), HttpStatus.OK);
 	}
-	@GetMapping(path = "/find")
-	public List<UsuarioDto> encontrarPeloNome(@RequestParam String nome){
-		return us.encontrarPeloNome(nome);
+	@GetMapping(path = "/encontrar")
+	public ResponseEntity<List<UsuarioDto>> encontrarPeloNome(@RequestParam String nome){
+		return new ResponseEntity<>(us.encontrarPeloNome(nome), HttpStatus.OK);
 	}
 	@PostMapping
-	public void salvar(@RequestBody @Valid UsuarioDto usuario) {
-		us.salvar(usuario);
+	public ResponseEntity<UsuarioDto> salvar(@RequestBody @Valid UsuarioDto usuario) {
+		return new ResponseEntity<>(us.salvar(usuario), HttpStatus.CREATED);
 	}
 	@PutMapping(path = "/{id}")
-	public void atualizar(@PathVariable long id, @RequestBody @Valid UsuarioDto usuario) {
+	public ResponseEntity<Void> atualizar(@PathVariable long id, @RequestBody @Valid UsuarioDto usuario) {
 		us.atualizar(id, usuario);
+		return new ResponseEntity<>( HttpStatus.OK);
 	}
 	@DeleteMapping(path = "/{id}")
-	public void delete(@PathVariable long id) {
+	public ResponseEntity<Void> delete(@PathVariable long id) {
 		us.deletar(id);
+		return new ResponseEntity<>( HttpStatus.NO_CONTENT);
 	}
 }
