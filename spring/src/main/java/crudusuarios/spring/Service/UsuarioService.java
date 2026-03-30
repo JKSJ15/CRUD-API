@@ -1,6 +1,7 @@
 package crudusuarios.spring.Service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import crudusuarios.spring.Domain.Usuario;
 import crudusuarios.spring.Repository.UsuarioRepository;
@@ -16,15 +17,17 @@ public class UsuarioService{
 		this.ur = ur;
 	}
 	//GETTERS MAPPING
-	public List<UsuarioDto> listar() {
-		return ur.findAll().stream().map(u -> UsuarioMapping.paraDto(u)).toList();
+	public Page<UsuarioDto> listar(Pageable pageable) {
+		return ur.findAll(pageable)
+	             .map(UsuarioMapping::paraDto);
 	}
 	public UsuarioDto encontrarPeloId(long id) {
 		Usuario usu = ur.findById(id).orElseThrow(()->new UserNotFoundException("Usuário não encontrado!"));
 		return UsuarioMapping.paraDto(usu);
 	}
-	public List<UsuarioDto> encontrarPeloNome(String nome) {
-		return ur.findByNome(nome).stream().map(u-> UsuarioMapping.paraDto(u)).toList();
+	public Page<UsuarioDto> encontrarPeloNome(String nome, Pageable pageable) {
+		return ur.findByNome(nome, pageable)
+	             .map(UsuarioMapping::paraDto);
 	}
 	//POST MAPPING
 	public UsuarioDto salvar(UsuarioDto dto) {

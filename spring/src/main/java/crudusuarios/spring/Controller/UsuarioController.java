@@ -1,6 +1,6 @@
 package crudusuarios.spring.Controller;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import crudusuarios.spring.Service.UsuarioService;
 import crudusuarios.spring.dto.UsuarioDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -26,16 +27,16 @@ public class UsuarioController {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<UsuarioDto>> listar(){
-		return new ResponseEntity<>(us.listar(), HttpStatus.OK);
+	public ResponseEntity<Page<UsuarioDto>> listar(Pageable pageable){
+		return new ResponseEntity<>(us.listar(pageable), HttpStatus.OK);
 	}
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<UsuarioDto> encontrarPeloId(@PathVariable long id){
 		return new ResponseEntity<>(us.encontrarPeloId(id), HttpStatus.OK);
 	}
 	@GetMapping(path = "/encontrar")
-	public ResponseEntity<List<UsuarioDto>> encontrarPeloNome(@RequestParam String nome){
-		return new ResponseEntity<>(us.encontrarPeloNome(nome), HttpStatus.OK);
+	public ResponseEntity<Page<UsuarioDto>> encontrarPeloNome(@RequestParam String nome, Pageable pageable){
+		return new ResponseEntity<>(us.encontrarPeloNome(nome, pageable), HttpStatus.OK);
 	}
 	@PostMapping
 	public ResponseEntity<UsuarioDto> salvar(@RequestBody @Valid UsuarioDto usuario) {
